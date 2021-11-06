@@ -1,4 +1,4 @@
-package main
+package ecsexample
 
 type Registry struct {
 	entities []*Entity

@@ -1,4 +1,4 @@
-package main
+package ecsexample
 
 import (
 	"fmt"
@@ -44,7 +44,7 @@ func (e *Entity) AddComponent(c ComponentTyper) {
 const TransformType ComponentType = "TRANSFORM"
 
 type TransformComponent struct {
-	posX, posY float64
+	PosX, PosY float64
 }
 
 func (t *TransformComponent) Type() ComponentType { return TransformType }
@@ -52,7 +52,7 @@ func (t *TransformComponent) Type() ComponentType { return TransformType }
 const SpriteType ComponentType = "SPRITE"
 
 type SpriteComponent struct {
-	image *ebiten.Image
+	Image *ebiten.Image
 }
 
 func (t *SpriteComponent) Type() ComponentType { return SpriteType }
