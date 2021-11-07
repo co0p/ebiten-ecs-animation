@@ -1,6 +1,8 @@
 package ecsexample
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 type SpriteRenderSystem struct {
 	Registry *Registry

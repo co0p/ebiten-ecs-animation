@@ -15,8 +15,8 @@ func (r *Registry) NewEntity() *Entity {
 func (r *Registry) Query(types ...ComponentType) []*Entity {
 	candidates := []*Entity{}
 
-	matchCount := 0
 	for _, e := range r.entities {
+		matchCount := 0
 		for _, c := range types {
 			if e.HasComponent(c) {
 				matchCount++
