@@ -13,55 +13,51 @@ import (
 const screenWidth = 500
 const screenHeight = 500
 
-type SimpleImageExample struct {
-	spriteRenderSystem *ecsexample.SpriteRenderSystem
-}
-
-func (a *SimpleImageExample) Draw(screen *ebiten.Image) {
-	a.spriteRenderSystem.Draw(screen)
-}
-
-func (a *SimpleImageExample) Update() error {
-	return nil
-}
-
-func (a *SimpleImageExample) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return screenWidth, screenHeight
-}
-
 func main() {
 
 	// loading assets
-	images, _ := LoadSpritesheet(Spritesheet, 4, 250, 260)
+	frames := LoadSpritesheet(Spritesheet, 4, 250, 260)
 
 	// entities
 	registry := ecsexample.Registry{}
 
 	e := registry.NewEntity()
-	e.AddComponent(&ecsexample.SpriteComponent{Image: images[0]})
-	e.AddComponent(&ecsexample.TransformComponent{PosX: 100, PosY: 200})
+	e.AddComponent(&ecsexample.AnimationComponent{
+		Frames:            frames,
+		CurrentFrameIndex: 0,
+		Count:             0,
+		AnimationSpeed:    0.125,
+	})
+	e.AddComponent(&ecsexample.SpriteComponent{Image: frames[0]})
+	e.AddComponent(&ecsexample.TransformComponent{PosX: 100, PosY: 100})
 
+	// systems
+	animationSystem := ecsexample.AnimationSystem{Registry: &registry}
 	spriteRenderSystem := ecsexample.SpriteRenderSystem{Registry: &registry}
 
 	// the game
-	example := SimpleImageExample{spriteRenderSystem: &spriteRenderSystem}
+	example := AnimationExample{
+		spriteRenderSystem: &spriteRenderSystem,
+		animationSystem:    &animationSystem,
+	}
+
 	ebiten.SetWindowSize(screenWidth, screenHeight)
-	ebiten.SetWindowTitle("render single image")
+	ebiten.SetWindowTitle("animation example")
 	ebiten.RunGame(&example) // omitted error handling
 }
 
-// LoadSpritesheet returns n sub images from the given input
-func LoadSpritesheet(input []byte, n int, width int, height int) ([]*ebiten.Image, error) {
+// LoadSpritesheet returns n sub images from the given input image
+func LoadSpritesheet(input []byte, n int, width int, height int) []*ebiten.Image {
 	sprites := []*ebiten.Image{}
 
 	spritesheet, _, _ := image.Decode(bytes.NewReader(input))
 	ebitenImage := ebiten.NewImageFromImage(spritesheet)
 
-	for i := 0; i <= n; i++ {
-		r := image.Rect(i*width, 0, (i+1)*width, height)
-		sprite := ebitenImage.SubImage(r).(*ebiten.Image)
+	for i := 0; i < n; i++ {
+		dimensions := image.Rect(i*width, 0, (i+1)*width, height)
+		sprite := ebitenImage.SubImage(dimensions).(*ebiten.Image)
 		sprites = append(sprites, sprite)
 	}
 
-	return sprites, nil
+	return sprites
 }

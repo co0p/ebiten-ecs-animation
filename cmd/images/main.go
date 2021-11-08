@@ -51,7 +51,7 @@ func main() {
 	// the game
 	example := MultipleImagesExample{spriteRenderSystem: &spriteRenderSystem}
 	ebiten.SetWindowSize(screenWidth, screenHeight)
-	ebiten.SetWindowTitle("render single image")
+	ebiten.SetWindowTitle("render multiple images")
 	ebiten.RunGame(&example) // omitted error handling
 }
 
