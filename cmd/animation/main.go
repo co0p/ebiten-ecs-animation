@@ -48,7 +48,7 @@ func main() {
 
 // LoadSpritesheet returns n sub images from the given input image
 func LoadSpritesheet(input []byte, n int, width int, height int) []*ebiten.Image {
-	sprites := []*ebiten.Image{}
+	var sprites []*ebiten.Image
 
 	spritesheet, _, _ := image.Decode(bytes.NewReader(input))
 	ebitenImage := ebiten.NewImageFromImage(spritesheet)
